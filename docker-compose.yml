@@ -1,0 +1,38 @@
+version: "3.8"
+
+services:
+  ollama:
+    image: ollama/ollama
+    container_name: ollama
+    restart: unless-stopped
+    ports:
+      - "11435:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    healthcheck:
+      test: ["CMD", "pgrep", "ollama"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 10s
+
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: open-webui
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - OLLAMA_DEFAULT_MODEL=deepseek-r1:1.5b  # Ensure Open WebUI uses this model
+    volumes:
+      - openwebui_data:/app/backend/data
+    depends_on:
+      ollama:
+        condition: service_healthy
+
+volumes:
+  ollama_data:
+    name: ollama_data 
+  openwebui_data:
+    name: openwebui_data
