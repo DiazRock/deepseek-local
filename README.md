@@ -20,6 +20,7 @@ In case we want to use an LLM with a higher performance, would be use to conside
 We have two ways to run deespeek locally:
 
 [docker-impl](./docker-impl/)
+
 [python-imp](./python-imp/)
 
 For each one you a `.sh` that works as entrypoint. Check the needed parameters in each case and run them, that's it :).
